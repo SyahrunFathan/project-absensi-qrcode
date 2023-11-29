@@ -1,12 +1,12 @@
 import axios from 'axios';
 import {getStorage} from '../Storages';
 
-const API = axios.create({baseURL: 'http://192.168.1.12:5001'});
+const API = axios.create({baseURL: 'http://192.168.1.5:5001'});
 
 API.interceptors.request.use(async req => {
   const response = await getStorage('profile');
-  if (response?.token) {
-    req.headers.Authorization = `Bearer ${response?.token}`;
+  if (response?.data?.token) {
+    req.headers.Authorization = `Bearer ${response?.data?.token}`;
   }
   return req;
 });
