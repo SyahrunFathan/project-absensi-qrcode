@@ -26,7 +26,6 @@ const SplashScreen = ({navigation}) => {
               }
             }
           };
-
           CheckUser();
         } else {
           navigation.replace('Assesment');

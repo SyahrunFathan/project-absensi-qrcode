@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {getStorage} from '../Storages';
 
-const API = axios.create({baseURL: 'http://192.168.1.5:5001'});
+const API = axios.create({baseURL: 'http://192.168.251.232:5001'});
 
 API.interceptors.request.use(async req => {
   const response = await getStorage('profile');
