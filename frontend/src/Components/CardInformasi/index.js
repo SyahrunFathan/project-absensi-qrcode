@@ -1,82 +1,71 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import IonIcon from '../IonIcons';
 import {COLORS, ILNullPhoto} from '../../Assets';
+import {fetchBerita} from '../../Utils';
 
 const CardInformasi = () => {
   const [viewDesc, setViewDesc] = useState(false);
-  const [data, setData] = useState([
-    {
-      id: 1,
-      judul: 'Program Beasiswa BRI, Untuk Mahasiswa Akhir!',
-      desc: 'This is a generator for text fonts of the cool variety noticed people were trying to find a generator like fancy letters, but were ending up on actual font',
-    },
-    {
-      id: 3,
-      judul: 'Program Beasiswa BRI, Untuk Mahasiswa Akhir!',
-      desc: 'This is a generator for text fonts of the cool variety noticed people were trying to find a generator like fancy letters, but were ending up on actual font',
-    },
-    {
-      id: 4,
-      judul: 'Program Beasiswa BRI, Untuk Mahasiswa Akhir!',
-      desc: 'This is a generator for text fonts of the cool variety noticed people were trying to find a generator like fancy letters, but were ending up on actual font',
-    },
-    {
-      id: 6,
-      judul: 'Program Beasiswa BRI, Untuk Mahasiswa Akhir!',
-      desc: 'This is a generator for text fonts of the cool variety noticed people were trying to find a generator like fancy letters, but were ending up on actual font',
-    },
-    {
-      id: 7,
-      judul: 'Program Beasiswa BRI, Untuk Mahasiswa Akhir!',
-      desc: 'This is a generator for text fonts of the cool variety noticed people were trying to find a generator like fancy letters, but were ending up on actual font',
-    },
-    {
-      id: 8,
-      judul: 'Program Beasiswa BRI, Untuk Mahasiswa Akhir!',
-      desc: 'This is a generator for text fonts of the cool variety noticed people were trying to find a generator like fancy letters, but were ending up on actual font',
-    },
-    {
-      id: 9,
-      judul: 'Program Beasiswa BRI, Untuk Mahasiswa Akhir!',
-      desc: 'This is a generator for text fonts of the cool variety noticed people were trying to find a generator like fancy letters, but were ending up on actual font',
-    },
-  ]);
+  const [data, setData] = useState([]);
+  const [message, setMessage] = useState('');
 
   const handleDesc = index => {
     const newViewDesc = {...viewDesc};
     newViewDesc[index] = !newViewDesc[index];
     setViewDesc(newViewDesc);
   };
+
+  useEffect(() => {
+    const AmbilData = async () => {
+      try {
+        const response = await fetchBerita();
+        setData(response?.data?.response);
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          setMessage(error.response.data.message);
+        }
+      }
+    };
+    AmbilData();
+  }, []);
   return (
     <View style={styles.contentNews}>
-      {data.map((item, index) => (
-        <TouchableOpacity
-          key={item?.id}
-          onPress={() => handleDesc(index)}
-          style={styles.container}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View>
-              <Image source={ILNullPhoto} style={{width: 50, height: 50}} />
+      {data && data.length > 0 ? (
+        data.map((item, index) => (
+          <TouchableOpacity
+            key={item?.id_berita}
+            onPress={() => handleDesc(index)}
+            style={styles.container}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View>
+                <Image
+                  source={item?.url ? {uri: item?.url} : ILNullPhoto}
+                  style={{width: 50, height: 50}}
+                />
+              </View>
+              <View style={styles.textContainer}>
+                <Text style={styles.text20}>{item?.judul_berita}</Text>
+              </View>
+              <View style={{marginLeft: 'auto'}}>
+                {viewDesc[index] ? (
+                  <IonIcon name={'chevron-down-outline'} size={20} />
+                ) : (
+                  <IonIcon name={'chevron-back-outline'} size={20} />
+                )}
+              </View>
             </View>
-            <View style={styles.textContainer}>
-              <Text style={styles.text20}>{item?.judul}</Text>
-            </View>
-            <View style={{marginLeft: 'auto'}}>
-              {viewDesc[index] ? (
-                <IonIcon name={'chevron-down-outline'} size={20} />
-              ) : (
-                <IonIcon name={'chevron-back-outline'} size={20} />
-              )}
-            </View>
-          </View>
-          {viewDesc[index] && (
-            <View style={{marginTop: 5}}>
-              <Text>{item?.desc}</Text>
-            </View>
-          )}
-        </TouchableOpacity>
-      ))}
+            {viewDesc[index] && (
+              <View style={{marginTop: 5}}>
+                <Text>{item?.isi_berita}</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+        ))
+      ) : (
+        <View style={styles.viewError}>
+          <Text style={styles.textGreyBold}>{message}</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -116,5 +105,16 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
     marginLeft: 8,
+  },
+  textGreyBold: {
+    color: COLORS.grey,
+    fontWeight: '700',
+    fontSize: 24,
+    fontStyle: 'italic',
+  },
+  viewError: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 40,
   },
 });

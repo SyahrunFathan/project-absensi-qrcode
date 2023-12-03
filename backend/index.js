@@ -5,13 +5,14 @@ import dotenv from 'dotenv';
 import path, {dirname} from 'path';
 import {fileURLToPath} from 'url';
 import db from './configs/Database.js';
-// import Model from './models/ModelMahasiswa.js'
+// import Model from './models/ModelMatkul.js';
 dotenv.config();
 
 // Route
 import RouteAuth from './routers/RouteAuth.js';
 import RouteMahasiswa from './routers/RouteMahasiswa.js';
 import RouteDosen from './routers/RouteDosen.js';
+import RouteBerita from './routers/RouteBerita.js';
 
 const app = express();
 
@@ -26,6 +27,8 @@ try {
   console.log(error);
 }
 
+const port = process.env.PORT;
+
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
@@ -38,5 +41,6 @@ app.use(
 app.use('/auth', RouteAuth);
 app.use('/mahasiswa', RouteMahasiswa);
 app.use('/dosen', RouteDosen);
+app.use('/berita', RouteBerita);
 
-app.listen(5001, () => console.log('Server up running at port 5001....'));
+app.listen(port, () => console.log(`Server up running at port ${port}....`));
