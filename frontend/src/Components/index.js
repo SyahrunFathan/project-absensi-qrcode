@@ -1,5 +1,6 @@
 import CardHome from "./CardHome";
 import CardInformasi from "./CardInformasi";
-import IonIcon from "./IonIcons";
+import CardMatkul from './CardMatkul';
+import IonIcon from './IonIcons';
 
-export {IonIcon, CardHome, CardInformasi};
+export {IonIcon, CardHome, CardInformasi, CardMatkul};

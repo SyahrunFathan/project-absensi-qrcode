@@ -24,6 +24,8 @@ const SplashScreen = ({navigation}) => {
               } else {
                 navigation.replace('MainApp');
               }
+            }else{
+              navigation.replace('Login');
             }
           };
           CheckUser();

@@ -115,3 +115,21 @@ export const resmoveToken = async (req, res) => {
     return res.sendStatus(500);
   }
 };
+
+export const Logout = async (req, res) => {
+  const token = req.cookies.token;
+  if (!token) return res.sendStatus(204);
+  const mahasiswa = await ModelMahasiswa.findAll({where: {token: token}});
+  const dosen = await ModelDosen.findAll({where: {token: token}});
+  if (mahasiswa[0]) {
+    const mhsId = mahasiswa[0].id_mhs;
+    await ModelMahasiswa.update({token: null}, {where: {id_mhs: mhsId}});
+  } else {
+    const dosenId = dosen[0].id_dosen;
+    await ModelDosen.update({token: null}, {where: {id_dosen: dosenId}});
+  }
+
+  res.clearCookie('token');
+
+  return res.sendStatus(200);
+};

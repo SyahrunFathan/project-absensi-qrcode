@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import path, {dirname} from 'path';
 import {fileURLToPath} from 'url';
 import db from './configs/Database.js';
-// import Model from './models/ModelMatkul.js';
+import Model from './models/ModelProgram.js';
 dotenv.config();
 
 // Route
@@ -13,6 +13,7 @@ import RouteAuth from './routers/RouteAuth.js';
 import RouteMahasiswa from './routers/RouteMahasiswa.js';
 import RouteDosen from './routers/RouteDosen.js';
 import RouteBerita from './routers/RouteBerita.js';
+import RouteProgram from './routers/RouteProgram.js';
 
 const app = express();
 
@@ -22,7 +23,7 @@ const __dirname = dirname(__filename);
 try {
   await db.authenticate();
   console.log('Database connected....');
-  // await Model.sync();
+  await Model.sync();
 } catch (error) {
   console.log(error);
 }
@@ -42,5 +43,6 @@ app.use('/auth', RouteAuth);
 app.use('/mahasiswa', RouteMahasiswa);
 app.use('/dosen', RouteDosen);
 app.use('/berita', RouteBerita);
+app.use('/program', RouteProgram);
 
 app.listen(port, () => console.log(`Server up running at port ${port}....`));

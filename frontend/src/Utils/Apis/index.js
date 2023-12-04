@@ -14,6 +14,7 @@ API.interceptors.request.use(async req => {
 export const LoginApi = async data => API.post('/auth/login', data);
 export const RemoveToken = async (id, data) =>
   API.patch(`/auth/remove_token/${id}`, data);
+export const LogoutApi = async () => API.delete('/auth/logout');
 
 // API BERITA
 export const fetchBerita = async () => API.get('/berita');
