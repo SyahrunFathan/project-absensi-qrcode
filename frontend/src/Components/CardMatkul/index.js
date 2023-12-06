@@ -1,73 +1,69 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import {COLORS, ICBooks} from '../../Assets';
+import {fetchProgramById, getStorage} from '../../Utils';
 
 const CardMatkul = () => {
+  const [program, setProgram] = useState([]);
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    const AmbilData = async () => {
+      const response = await getStorage('profile');
+      try {
+        const data = await fetchProgramById(response?.data?.result?.userId);
+        setProgram(data?.data?.response);
+      } catch (error) {
+        setMessage(error?.response?.data?.message);
+      }
+    };
+    AmbilData();
+  }, []);
+
   return (
-    <View>
-      <View style={styles.STCard}>
-        <Image source={ICBooks} style={styles.STImageCard} />
-        <View style={{gap: 3}}>
-          <Text style={styles.STTextBold}>Pemrograman Mobile</Text>
-          <Text>
-            Total SKS: <Text style={{color: COLORS.primary}}>4.0</Text>
-          </Text>
+    <View style={{marginBottom: -10}}>
+      {program && program.length > 0 ? (
+        program.map((item, index) => (
+          <View style={styles.STCard} key={index}>
+            <Image source={ICBooks} style={styles.STImageCard} />
+            <View style={{gap: 3}}>
+              <Text style={styles.STTextBold}>{item?.matkul?.matkul}</Text>
+              <View style={{flexDirection: 'row', gap: 20}}>
+                <Text style={{fontSize: 16}}>
+                  Total SKS:{' '}
+                  <Text style={{color: COLORS.primary, fontSize: 16}}>
+                    {item?.matkul?.sks}
+                  </Text>
+                </Text>
+                <Text style={{fontSize: 16}}>
+                  Hari:{' '}
+                  <Text style={{color: COLORS.primary, fontSize: 16}}>
+                    {item?.matkul?.jadwal[0]?.hari}
+                  </Text>
+                </Text>
+              </View>
+              <View style={{flexDirection: 'row', gap: 20}}>
+                <Text style={{fontSize: 16}}>
+                  Mulai:{' '}
+                  <Text style={{color: COLORS.primary, fontSize: 16}}>
+                    {item?.matkul?.jadwal[0]?.jam_mulai}
+                  </Text>
+                </Text>
+                <Text style={{fontSize: 16}}>
+                  Selesai:{' '}
+                  <Text style={{color: COLORS.primary, fontSize: 16}}>
+                    {item?.matkul?.jadwal[0]?.jam_selesai}
+                  </Text>
+                </Text>
+              </View>
+            </View>
+          </View>
+        ))
+      ) : (
+        <View style={styles.STViewError}>
+          <Text style={styles.STTextBoldGrey}>{message}</Text>
         </View>
-      </View>
-      <View style={styles.STCard}>
-        <Image source={ICBooks} style={styles.STImageCard} />
-        <View style={{gap: 3}}>
-          <Text style={styles.STTextBold}>Pemrograman Mobile</Text>
-          <Text>
-            Total SKS: <Text style={{color: COLORS.primary}}>4.0</Text>
-          </Text>
-        </View>
-      </View>
-      <View style={styles.STCard}>
-        <Image source={ICBooks} style={styles.STImageCard} />
-        <View style={{gap: 3}}>
-          <Text style={styles.STTextBold}>Pemrograman Mobile</Text>
-          <Text>
-            Total SKS: <Text style={{color: COLORS.primary}}>4.0</Text>
-          </Text>
-        </View>
-      </View>
-      <View style={styles.STCard}>
-        <Image source={ICBooks} style={styles.STImageCard} />
-        <View style={{gap: 3}}>
-          <Text style={styles.STTextBold}>Pemrograman Mobile</Text>
-          <Text>
-            Total SKS: <Text style={{color: COLORS.primary}}>4.0</Text>
-          </Text>
-        </View>
-      </View>
-      <View style={styles.STCard}>
-        <Image source={ICBooks} style={styles.STImageCard} />
-        <View style={{gap: 3}}>
-          <Text style={styles.STTextBold}>Pemrograman Mobile</Text>
-          <Text>
-            Total SKS: <Text style={{color: COLORS.primary}}>4.0</Text>
-          </Text>
-        </View>
-      </View>
-      <View style={styles.STCard}>
-        <Image source={ICBooks} style={styles.STImageCard} />
-        <View style={{gap: 3}}>
-          <Text style={styles.STTextBold}>Pemrograman Mobile</Text>
-          <Text>
-            Total SKS: <Text style={{color: COLORS.primary}}>4.0</Text>
-          </Text>
-        </View>
-      </View>
-      <View style={styles.STCard}>
-        <Image source={ICBooks} style={styles.STImageCard} />
-        <View style={{gap: 3}}>
-          <Text style={styles.STTextBold}>Pemrograman Mobile</Text>
-          <Text>
-            Total SKS: <Text style={{color: COLORS.primary}}>4.0</Text>
-          </Text>
-        </View>
-      </View>
+      )}
     </View>
   );
 };
@@ -76,7 +72,7 @@ export default CardMatkul;
 const styles = StyleSheet.create({
   STCard: {
     borderWidth: 1,
-    marginTop: 20,
+    marginTop: 10,
     paddingHorizontal: 10,
     paddingVertical: 7,
     flexDirection: 'row',
@@ -84,7 +80,7 @@ const styles = StyleSheet.create({
     gap: 20,
     borderRadius: 12,
     borderColor: COLORS.grey,
-    elevation: 2,
+    backgroundColor: COLORS.white,
   },
   STImageCard: {
     width: 60,
@@ -92,7 +88,19 @@ const styles = StyleSheet.create({
   },
   STTextBold: {
     color: COLORS.black,
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: '700',
+  },
+  STTextBoldGrey: {
+    color: COLORS.grey,
+    fontWeight: '700',
+    fontSize: 24,
+    fontStyle: 'italic',
+    textAlign: 'center',
+  },
+  STViewError: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 40,
   },
 });

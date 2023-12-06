@@ -21,6 +21,12 @@ const ModelJadwal = db.define(
     jam_selesai: {
       type: DataTypes.CHAR(30),
     },
+    ruangan: {
+      type: DataTypes.CHAR(20),
+    },
+    kelas: {
+      type: DataTypes.CHAR(20),
+    },
     matkul_id: {
       type: DataTypes.INTEGER,
     },
@@ -31,5 +37,6 @@ const ModelJadwal = db.define(
 );
 
 ModelJadwal.belongsTo(ModelMatkul, {foreignKey: 'matkul_id', as: 'matkul'});
+ModelMatkul.hasMany(ModelJadwal, {foreignKey: 'matkul_id', as: 'jadwal'});
 
 export default ModelJadwal;

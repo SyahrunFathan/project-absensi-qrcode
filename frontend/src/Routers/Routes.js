@@ -1,22 +1,34 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   AssesmentScreen,
+  HistoryScreen,
   HomeScreen,
   LoginScreen,
   ProfileScreen,
+  QRCodeDosenScreen,
+  QRCodeScreen,
   SplashScreen,
 } from '../Screens';
 import {COLORS} from '../Assets';
-import HistoryScreen from '../Screens/HistoryScreen/HistoryScreen';
-import QRCodeScreen from '../Screens/QRCodeScreen/QRCodeScreen';
 import IonIcon from '../Components/IonIcons';
+import {getStorage} from '../Utils';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const MainApp = () => {
+  const [profile, setProfile] = useState([]);
+
+  useEffect(() => {
+    const AmbilData = async () => {
+      const response = await getStorage('profile');
+      setProfile(response?.data?.result);
+    };
+
+    AmbilData();
+  }, []);
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -55,7 +67,11 @@ const MainApp = () => {
       })}>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="History" component={HistoryScreen} />
-      <Tab.Screen name="QrCode" component={QRCodeScreen} />
+      {profile?.role === 1 ? (
+        <Tab.Screen name="QrCode" component={QRCodeScreen} />
+      ) : (
+        <Tab.Screen name="QrCode" component={QRCodeDosenScreen} />
+      )}
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );

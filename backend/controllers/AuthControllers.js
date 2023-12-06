@@ -19,6 +19,8 @@ export const Login = async (req, res) => {
       });
       if (!checkMahasiswa[0])
         return res.status(400).json({message: 'Username tidak terdaftar!'});
+      if (checkMahasiswa[0].token)
+        return res.status(400).json({message: 'Akun anda sedang login!'});
       const match = await bcrypt.compare(password, checkMahasiswa[0].password);
       if (!match)
         return res.status(400).json({message: 'Password anda salah!'});
@@ -61,6 +63,8 @@ export const Login = async (req, res) => {
       });
       if (!checkDosen[0])
         return res.status(400).json({message: 'Username tidak terdaftar!'});
+      if (checkDosen[0].token)
+        return res.status(400).json({message: 'Akun anda sedang login!'});
       const match = await bcrypt.compare(password, checkDosen[0].password);
       if (!match)
         return res.status(400).json({message: 'Password anda salah!'});

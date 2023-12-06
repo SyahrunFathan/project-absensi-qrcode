@@ -3,6 +3,7 @@ import {
   BackHandler,
   Image,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -61,75 +62,78 @@ const LoginScreen = ({navigation}) => {
   };
   return (
     <SafeAreaView style={styles.STContainer}>
-      <View style={styles.STContentCard}>
-        <View style={styles.STContentCardHeader}>
-          <TouchableOpacity onPress={handleButtonBack}>
-            <Image source={ICBackArrow} style={{width: 38, height: 38}} />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.STContentCard}>
+          <View style={styles.STContentCardHeader}>
+            <TouchableOpacity onPress={handleButtonBack}>
+              <Image source={ICBackArrow} style={{width: 38, height: 38}} />
+            </TouchableOpacity>
+            <Image source={ILLogo} style={{width: 80, height: 80}} />
+          </View>
+          <View style={styles.STContentText}>
+            <Text style={styles.STTextBold700}>Hallo, Selamat Datang! 👋</Text>
+            <Text style={styles.STTextLead}>
+              Sistem Aplikasi Absensi Mahasiswa Jurusan{'\n'}Teknologi
+              Informasi!
+            </Text>
+          </View>
+        </View>
+        <View style={styles.STContent}>
+          <View style={{gap: 10}}>
+            <Text style={styles.STTextNormal}>Username :</Text>
+            <View style={styles.STContentForm}>
+              <TextInput
+                placeholder="Enter your username"
+                style={styles.STFormInput}
+                value={username}
+                onChangeText={text => setUsername(text)}
+              />
+              <TouchableOpacity style={styles.STBtnIcon}>
+                <IonIcon name={'person'} size={24} />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{marginVertical: 10, gap: 10}}>
+            <Text style={styles.STTextNormal}>Password :</Text>
+            <View style={styles.STContentForm}>
+              <TextInput
+                placeholder="Enter your username"
+                style={styles.STFormInput}
+                secureTextEntry={!showPassword}
+                value={password}
+                onChangeText={text => setPassword(text)}
+              />
+              <TouchableOpacity
+                style={styles.STBtnIcon}
+                onPress={() => setShowPassword(!showPassword)}>
+                {showPassword === true ? (
+                  <IonIcon name={'eye'} size={24} />
+                ) : (
+                  <IonIcon name={'eye-off'} size={24} />
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{marginVertical: 10, gap: 10}}>
+            <Text style={styles.STTextNormal}>Hak Akses :</Text>
+            <View style={styles.STContentForm}>
+              <Picker
+                style={styles.STFormInput}
+                selectedValue={role}
+                onValueChange={(item, index) => setRole(item)}>
+                <Picker.Item label="-- Pilih Hak Akses --" value={''} />
+                <Picker.Item label="Mahasiswa" value={1} />
+                <Picker.Item label="Dosen" value={2} />
+              </Picker>
+            </View>
+          </View>
+          <TouchableOpacity
+            style={styles.STButtonLogin}
+            onPress={handleButtonLogin}>
+            <Text style={styles.STTextButton}>SIGN IN</Text>
           </TouchableOpacity>
-          <Image source={ILLogo} style={{width: 80, height: 80}} />
         </View>
-        <View style={styles.STContentText}>
-          <Text style={styles.STTextBold700}>Hallo, Selamat Datang! 👋</Text>
-          <Text style={styles.STTextLead}>
-            Sistem Aplikasi Absensi Mahasiswa Jurusan{'\n'}Teknologi Informasi!
-          </Text>
-        </View>
-      </View>
-      <View style={styles.STContent}>
-        <View style={{gap: 10}}>
-          <Text style={styles.STTextNormal}>Username :</Text>
-          <View style={styles.STContentForm}>
-            <TextInput
-              placeholder="Enter your username"
-              style={styles.STFormInput}
-              value={username}
-              onChangeText={text => setUsername(text)}
-            />
-            <TouchableOpacity style={styles.STBtnIcon}>
-              <IonIcon name={'person'} size={24} />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={{marginVertical: 10, gap: 10}}>
-          <Text style={styles.STTextNormal}>Password :</Text>
-          <View style={styles.STContentForm}>
-            <TextInput
-              placeholder="Enter your username"
-              style={styles.STFormInput}
-              secureTextEntry={!showPassword}
-              value={password}
-              onChangeText={text => setPassword(text)}
-            />
-            <TouchableOpacity
-              style={styles.STBtnIcon}
-              onPress={() => setShowPassword(!showPassword)}>
-              {showPassword === true ? (
-                <IonIcon name={'eye'} size={24} />
-              ) : (
-                <IonIcon name={'eye-off'} size={24} />
-              )}
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={{marginVertical: 10, gap: 10}}>
-          <Text style={styles.STTextNormal}>Hak Akses :</Text>
-          <View style={styles.STContentForm}>
-            <Picker
-              style={styles.STFormInput}
-              selectedValue={role}
-              onValueChange={(item, index) => setRole(item)}>
-              <Picker.Item label="-- Pilih Hak Akses --" value={''} />
-              <Picker.Item label="Mahasiswa" value={1} />
-              <Picker.Item label="Dosen" value={2} />
-            </Picker>
-          </View>
-        </View>
-        <TouchableOpacity
-          style={styles.STButtonLogin}
-          onPress={handleButtonLogin}>
-          <Text style={styles.STTextButton}>SIGN IN</Text>
-        </TouchableOpacity>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
